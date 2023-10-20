@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  mongodb:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: pass
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb:/data/db
+  rabbit:
+    image: rabbitmq:management
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - rabbitmq:/var/lib/rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: pass
+
+volumes:
+  mongodb:
+  rabbitmq:
