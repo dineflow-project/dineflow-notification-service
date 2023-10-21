@@ -12,12 +12,13 @@ import (
 
 type Notification struct {
 	RecipientID string `json:"recipient_id"`
+	OrderID     string `json:"order_id"`
 	IsRead      bool   `json:"is_read"`
 	Type        string `json:"type"`
 	Timestamp   string `json:"timestamp"`
 }
 
-func PushNotification(recipientID string, isRead bool, notiType string) error {
+func PushNotification(recipientID string, orderID string, notiType string) error {
 	// Connect to RabbitMQ server
 	conn, err := amqp.Dial(os.Getenv("AMQP_URL"))
 	if err != nil {
@@ -48,7 +49,8 @@ func PushNotification(recipientID string, isRead bool, notiType string) error {
 	// Create a notification message
 	notification := Notification{
 		RecipientID: recipientID,
-		IsRead:      isRead,
+		OrderID:     orderID,
+		IsRead:      false,
 		Type:        notiType,
 		Timestamp:   time.Now().Format(time.RFC3339),
 	}
