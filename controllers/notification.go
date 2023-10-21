@@ -71,9 +71,17 @@ func UpdateNotifications(msg string) error {
 	}
 
 	collection := database.Client.Database(os.Getenv("MONGO_DATABASE")).Collection("notifications")
-	_, err = collection.InsertOne(context.Background(), notification)
-	if err != nil {
-		return err
+
+	if notification.Type == "delete" {
+		_, err = collection.DeleteMany(context.Background(), bson.M{"order_id": notification.OrderID})
+		if err != nil {
+			return err
+		}
+	} else {
+		_, err = collection.InsertOne(context.Background(), notification)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
