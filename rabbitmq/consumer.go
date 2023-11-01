@@ -12,6 +12,8 @@ func StartNotificationConsumer(amqpURL string, queueName string) {
 	conn, err := amqp.Dial(amqpURL)
 	if err != nil {
 		log.Fatalf("Failed to connect to RabbitMQ: %v", err)
+	} else {
+		log.Println("Connected to RabbitMQ")
 	}
 	defer conn.Close()
 
@@ -48,6 +50,8 @@ func StartNotificationConsumer(amqpURL string, queueName string) {
 	if err != nil {
 		log.Fatalf("Failed to register a consumer: %v", err)
 	}
+
+	log.Println("Waiting for messages...")
 
 	for msg := range msgs {
 		log.Printf("Received a message: %s", msg.Body)
