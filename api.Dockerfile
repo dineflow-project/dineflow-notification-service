@@ -5,16 +5,13 @@ WORKDIR /dineflow-notification-service
 RUN go mod tidy
 RUN go build
 
-FROM golang:1.21.3-bullseye AS runner
-ENV GIN_MODE release
-
-RUN apt-get update && apt-get install -y wget
+# Create a new stage for the final image
+FROM debian:bullseye-slim
+RUN apt-get update && apt-get install -y ca-certificates wget
 RUN wget -O /usr/local/bin/wait-for-it.sh https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
 RUN chmod +x /usr/local/bin/wait-for-it.sh
 
-RUN mkdir /app
-WORKDIR /app
-COPY --from=builder /dineflow-notification-service/dineflow-notification-service /app
+COPY --from=builder /dineflow-notification-service/dineflow-notification-service /app/dineflow-notification-service
 
 EXPOSE 8093
 
