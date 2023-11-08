@@ -38,6 +38,7 @@ services:
       - rabbit
     env_file:
       - ./.env
+    restart: on-failure
 
 networks:
   noti_network:
