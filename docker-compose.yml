@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  mongodb:
+  noti_mongodb:
     container_name: "noti_services_mongodb"
     image: mongo
     networks:
@@ -11,8 +11,8 @@ services:
     env_file:
       - ./.env
     volumes:
-      - mongodb:/data/db
-  rabbit:
+      - noti_mongodb:/data/db
+  noti_rabbit:
     container_name: "noti_services_rabbitmq"
     image: rabbitmq:management
     networks:
@@ -23,8 +23,8 @@ services:
     env_file:
       - ./.env
     volumes:
-      - rabbitmq:/var/lib/rabbitmq
-  api:
+      - noti_rabbitmq:/var/lib/rabbitmq
+  noti_api:
     container_name: "noti_services_api"
     build:
       context: .
@@ -34,8 +34,8 @@ services:
     networks:
       - noti_network
     depends_on:
-      - mongodb
-      - rabbit
+      - noti_mongodb
+      - noti_rabbit
     env_file:
       - ./.env
     restart: on-failure
@@ -43,5 +43,5 @@ services:
 networks:
   noti_network:
 volumes:
-  mongodb:
-  rabbitmq:
+  noti_mongodb:
+  noti_rabbitmq:

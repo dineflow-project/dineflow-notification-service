@@ -15,4 +15,4 @@ COPY --from=builder /dineflow-notification-service/dineflow-notification-service
 
 EXPOSE 8093
 
-CMD ["wait-for-it.sh", "rabbit:5672", "--", "/app/dineflow-notification-service"]
+CMD ["wait-for-it.sh", "noti_rabbit:5672", "--", "/app/dineflow-notification-service"]
