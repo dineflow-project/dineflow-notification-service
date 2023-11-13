@@ -1,0 +1,47 @@
+version: '3'
+
+services:
+  noti_mongodb:
+    container_name: "noti_services_mongodb"
+    image: mongo
+    networks:
+      - noti_network
+    ports:
+      - "27017:27017"
+    env_file:
+      - ./.env
+    volumes:
+      - noti_mongodb:/data/db
+  noti_rabbit:
+    container_name: "noti_services_rabbitmq"
+    image: rabbitmq:management
+    networks:
+      - noti_network
+    ports:
+      - 5672:5672
+      - 15672:15672
+    env_file:
+      - ./.env
+    volumes:
+      - noti_rabbitmq:/var/lib/rabbitmq
+  noti_api:
+    container_name: "noti_services_api"
+    build:
+      context: .
+      dockerfile: ./api.Dockerfile
+    ports:
+      - "8093:8093"
+    networks:
+      - noti_network
+    depends_on:
+      - noti_mongodb
+      - noti_rabbit
+    env_file:
+      - ./.env
+    restart: on-failure
+
+networks:
+  noti_network:
+volumes:
+  noti_mongodb:
+  noti_rabbitmq:
